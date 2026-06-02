@@ -1779,7 +1779,6 @@ var UNIT_FACTORS = Object.freeze({
  * @module engine/geometry
  */
 
-
 /**
  * @typedef {Object} LineDef
  * @property {'points'|'point-slope'} mode
@@ -2223,7 +2222,6 @@ function computePolygonale(input) {
  * @module engine/calsemis
  */
 
-
 var PI = Math.PI;
 var GRAD_TO_RAD = PI / 200;
 
@@ -2377,7 +2375,6 @@ function computeSemis(stations, observations) {
  * @module engine/implanta
  */
 
-
 /**
  * CalGisement — variante CALGAD avec micro-offsets d'arrondi de l'original.
  * @param {number} dx
@@ -2446,9 +2443,6 @@ function computeImplantation(input) {
  * Voir docs/algorithms/ALLER.md.
  * @module engine/aller
  */
-
-
-
 
 /**
  * @typedef {Object} SurfaceResult
@@ -2915,7 +2909,6 @@ function computeProjet(points, params) {
  * Voir docs/algorithms/PT-NODAL.md. Réutilise calgad (cf. polygonale).
  * @module engine/ptnodal
  */
-
 
 var COEF = Math.PI / 200;
 
@@ -4738,7 +4731,6 @@ function composeFixed(fields) {
  * @module converters/pol
  */
 
-
 var POL_HEADER = ['PO', 'POL', 'Nø', 'N ø'];
 
 /**
@@ -4787,7 +4779,6 @@ function serializePol(points) {
  * Voir docs/LEGACY-FORMATS.md §2.
  * @module converters/dat
  */
-
 
 /** Code type .DAT SEMIS (ligne 2) → instrument. */
 var SEMIS_TYPE_BY_CODE = { '2 0': 'RDS', '5 0': 'T12', '4 0': 'DIE' };
@@ -4982,7 +4973,6 @@ function serializeDatSemis(observations) {
  * @module converters/cnt
  */
 
-
 var CNT_HEADER = ['SEM', 'ST.', 'LEV'];
 
 /**
@@ -5081,7 +5071,6 @@ function serializeCnt(observations) {
  * @module converters/cop
  */
 
-
 /**
  * Parse un fichier .COP.
  * Lignes d'en-tête : TYPE / CODE / CENTRE / CLIENT / BAT (mot-clé col 1, valeur col 11).
@@ -5125,7 +5114,6 @@ function parseCop(text) {
  * Voir docs/algorithms/PROFILON.md §2.
  * @module converters/profil
  */
-
 
 /**
  * Parse un fichier .PRO → points combinés.
@@ -5298,7 +5286,6 @@ function isXyzBinary(data) {
  * Refactoré en Session #8 : utilisation de fixed-width.js (fstr, fnum, padStr, padNum, isHeaderLine)
  * au lieu de substring()/trim()/padStart()/padEnd() manuels.
  */
-
 
 var RECORD_SIZE = 21;  // 5 (NUM$) + 8 (X$) + 8 (Y$)
 var NUM_LEN = 5;
@@ -5622,7 +5609,9 @@ function profilToEntities(model) {
   for (const c of model.cotes.pr) ents.push({ type: 'text', layer: 'COTES', x: c.x, y: c.y, value: c.value.toFixed(3), h: 0.15, angle: 90, anchor: 'middle' });
   for (const c of model.cotes.pk) ents.push({ type: 'text', layer: 'COTES', x: c.x, y: c.y, value: c.value.toFixed(2), h: 0.15, angle: 90, anchor: 'middle' });
   // Pentes / distances (texte horizontal)
-  for (const p of model.
+  // (Incomplete logic removed)
+  return ents;
+}
 
 
 /* converters/advanced-generators.js */
@@ -5633,7 +5622,6 @@ function profilToEntities(model) {
  * Fonctions pures. Largeurs fixes via fixed-width.js (le chaînage .tnp → FIPROTN en dépend).
  * @module converters/advanced-generators
  */
-
 
 /** Biais d'arrondi mm de l'original (CALGAD : Distance = SQR(...) + .0005). */
 var ROUND_BIAS = 0.0005;
@@ -5917,33 +5905,6 @@ function generateProfilEnLongFromSpt(sptText, startCumul = 0, headerOpts = {}) {
  */
 
 
-import {
-  intersectLines, polygonArea, lineEquation, distance, gisement,
-} from './geometry.js';
-
-
-
-
-
-
-
-
-
-
-export {
-  EPS, RAD_TO_GRADES, GRADES_TO_RAD, UNIT_FACTORS,
-  intersectLines, polygonArea, lineEquation, distance, gisement,
-  convertArea, formatCoordinate,
-  computePolygonale, calgad,
-  computeSemis, radiatePoint,
-  computeImplantation, calGisementImpl,
-  computePointNodal,
-  computeSurface,
-  computeTantiemes,
-  computeProfilEnLong, mergeProfiles, interpAlt, toScrProfil,
-  computeProfilType,
-  computeProjet,
-};
 
 var TopoEngine = {
   intersectLines, polygonArea, lineEquation, distance, gisement,
@@ -5978,14 +5939,6 @@ if (typeof window !== 'undefined') {
 
 
 
-
-
-
-
-export { parsePol, serializePol, parseDatPolygonale, parseDatSemis, serializeDatPolygonale, serializeDatSemis, parseCnt, serializeCnt, detectInstrumentType, parseCop, parsePro, parseProfilSeries };
-export { toDXF, toSVG, profilToEntities };
-export { calculateDistance2D, extractProfilePoints, generateTnpFormat, generateFichprofFormats, calculateCrossSections, generateProfilEnLong, parseSptContent, generateProfilEnLongFromSpt };
-export { parseXyzBinary, xyzToBinary, buildPointsMap, parseXyzBinaryToMap, isXyzBinary };
 
 /**
  * Parse un fichier .XYZ (whitespace-delimited: ID X Y Z).
@@ -6122,7 +6075,6 @@ var DEFAULT_PAD      = 0.12;
  * intersections, étiquettes de distance. Installées sur le prototype.
  * @module ui/canvas-draw-primitives
  */
-
 /**
  * Attache les méthodes de dessin de primitives au prototype donné.
  * @param {object} P  CanvasRenderer.prototype
@@ -6635,12 +6587,6 @@ function installProfil(P) {
  * @module ui/canvas-renderer
  */
 
-import {
-  BG_COLOR, GRID_LINE_COLOR, GRID_LABEL_COLOR, GRID_LABEL_FONT,
-  MIN_SCALE, MAX_SCALE, ZOOM_SENSITIVITY, DEFAULT_PAD,
-} from './canvas-constants.js';
-
-
 // ── Utility ───────────────────────────────────────────────────────────
 
 /**
@@ -7006,7 +6952,7 @@ if (typeof window !== 'undefined') {
   window.CanvasRenderer = CanvasRenderer;
 }
 
-export { CanvasRenderer };
+
 
 
 /* ui/core.js */
@@ -7274,7 +7220,6 @@ function toolHasSplitLayout(toolId) {
  * S'enregistre dans le registre pour les vues `home` et `historique`.
  * @module ui/history
  */
-
 
 // Cache mémoire de l'historique chargé depuis userData/history.json
 var history = { settings: { autoDeleteDays: 0 }, entries: [] };
@@ -7647,8 +7592,6 @@ registerTool('historique', {
 /**
  * Outil : Calculs de copropriété (tantièmes). @module ui/tool-calcopro
  */
-
-
 function setupCalcoproTool() {
   $('#btn-copro-add').addEventListener('click', addCoproLot);
   $('#btn-copro-calc').addEventListener('click', () => { computeCopro(); recordHistory('calcopro'); });
@@ -7815,9 +7758,6 @@ registerTool('calcopro', {
 /**
  * Outil : Calcul de semis de points. @module ui/tool-calsemis
  */
-
-
-
 function setupCalsemisTool() {
   $('#btn-load-pol').addEventListener('click', () => loadCalsemisFile('POL'));
   $('#btn-load-cnt').addEventListener('click', () => loadCalsemisFile('CNT'));
@@ -8005,7 +7945,6 @@ registerTool('calsemis', {
 /**
  * Outil : Convertisseurs de formats (DAT/POL/CNT…). @module ui/tool-converters
  */
-
 function setupConvertersTool() {
   const dropzone = $('#converter-dropzone');
   const btnBrowse = $('#btn-browse-file');
@@ -8109,7 +8048,6 @@ registerTool('converters', { setup: setupConvertersTool });
 /**
  * Outil : FICHPROF — générateur de fichiers profils (Phase 5). @module ui/tool-fichprof
  */
-
 function setupFichprofTool() {
   const lotInput = $('#file-fichprof-lot');
   const coordsInput = $('#file-fichprof-coords');
@@ -8292,8 +8230,6 @@ registerTool('fichprof', { setup: setupFichprofTool });
 /**
  * Outil : Implantation & piquetage. @module ui/tool-implanta
  */
-
-
 function setupImplantaTool() {
   $('#btn-impl-add-point').addEventListener('click', addImplantaPoint);
   $('#btn-impl-calc').addEventListener('click', () => { computeImplanta(); recordHistory('implanta'); });
@@ -8478,8 +8414,6 @@ registerTool('implanta', {
 /**
  * Outil : Profil en long (PROFILON/PLONG). @module ui/tool-profilon
  */
-
-
 function setupProfilonTool() {
   $('#btn-profilon-add').addEventListener('click', addProfilonPoint);
   $('#btn-profilon-calc').addEventListener('click', () => { computeProfilon(); recordHistory('profilon'); });
@@ -8695,8 +8629,6 @@ registerTool('profilon', {
 /**
  * Outil : Profil type (déblai/remblai). @module ui/tool-proftyp
  */
-
-
 function setupProftypTool() {
   $('#btn-proftyp-calc').addEventListener('click', () => { computeProftyp(); recordHistory('proftyp'); });
   $('#btn-proftyp-demo1').addEventListener('click', () => { $('#proftyp-haut').value = '3.0'; computeProftyp(); });
@@ -8756,8 +8688,6 @@ registerTool('proftyp', {
 /**
  * Outil : Projet routier (cubatures). @module ui/tool-projet
  */
-
-
 function setupProjetTool() {
   $('#btn-projet-add').addEventListener('click', addProjetPoint);
   $('#btn-projet-calc').addEventListener('click', () => { computeProjet(); recordHistory('projet'); });
@@ -8939,8 +8869,6 @@ registerTool('projet', {
 /**
  * Outil : Point nodal (convergence de cheminements). @module ui/tool-ptnodal
  */
-
-
 function setupPtNodalTool() {
   $('#btn-ptnodal-add-branch').addEventListener('click', addPtNodalBranch);
   $('#btn-ptnodal-calc').addEventListener('click', () => { computePtNodal(); recordHistory('ptnodal'); });
@@ -9101,8 +9029,6 @@ registerTool('ptnodal', {
 /**
  * Outil : Surface de polygone. @module ui/tool-surface
  */
-
-
 function setupSurfaceTool() {
   // Add point button
   $('#btn-add-point')?.addEventListener('click', () => addPoint());
@@ -9415,8 +9341,6 @@ registerTool('surface', {
 /**
  * Outil : Intersection de droites. @module ui/tool-intersection
  */
-
-
 function setupIntersectionTool() {
   // Mode toggles for D1
   $('[name="d1-mode"]').forEach(radio => {
@@ -9777,8 +9701,6 @@ registerTool('intersection', {
 /**
  * Outil : Polygonales & cheminements. @module ui/tool-polygona
  */
-
-
 function setupPolygonaTool() {
   // Type toggles
   $('[name="poly-type"]').forEach(radio => {
@@ -10183,23 +10105,7 @@ registerTool('polygona', {
  * @module ui/app
  */
 
-import {
-  state, $, $, setActive, toast, switchTool, setupAllTools, toolHasSplitLayout,
-} from './core.js';
-
 // Modules d'outils — importés pour leur effet de bord (registerTool au chargement)
-
-
-
-
-
-
-
-
-
-
-
-
 /* ─── Raccourcis clavier (enchaînement de saisie par Entrée) ─── */
 function setupKeyboardShortcuts() {
   document.addEventListener('keydown', (e) => {
