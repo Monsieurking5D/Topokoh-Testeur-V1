@@ -1738,7 +1738,6 @@
 (function(){"use strict";
 
 /* engine/constants.js */
-{
 /**
  * Constantes partagées du moteur topographique.
  * Pur — aucune dépendance.
@@ -1746,19 +1745,19 @@
  */
 
 /** Tolérance de comparaison flottante (équiv. comparaisons QuickBASIC DOUBLE). */
-const EPS = 1e-12;
+var EPS = 1e-12;
 
 /** Facteur : 1 radian = 200/π grades. */
-const RAD_TO_GRADES = 200.0 / Math.PI;
+var RAD_TO_GRADES = 200.0 / Math.PI;
 
 /** Facteur : 1 grade = π/200 radians. */
-const GRADES_TO_RAD = Math.PI / 200.0;
+var GRADES_TO_RAD = Math.PI / 200.0;
 
 /**
  * Facteurs d'unités legacy (humain → fichier .DAT entier).
  * Voir docs/LEGACY-FORMATS.md §0.
  */
-const UNIT_FACTORS = Object.freeze({
+var UNIT_FACTORS = Object.freeze({
   XY: 1000,    // mètres → millimètres
   Z: 1000,
   AG: 100,     // grades → centigrades
@@ -1771,10 +1770,8 @@ const UNIT_FACTORS = Object.freeze({
   CAN: 1000,
 });
 
-}
 
 /* engine/geometry.js */
-{
 /**
  * Géométrie topographique — fonctions pures.
  * Traduit fidèlement les algorithmes QuickBASIC de TOPO.DOC.
@@ -1955,10 +1952,8 @@ function gisement(x1, y1, x2, y2) {
   return gr;
 }
 
-}
 
 /* engine/units.js */
-{
 /**
  * Unités cadastrales françaises et formatage.
  * @module engine/units
@@ -2002,10 +1997,8 @@ function formatCoordinate(value, decimals = 3) {
   return parts.length > 1 ? intPart + '.' + parts[1] : intPart;
 }
 
-}
 
 /* engine/polygonale.js */
-{
 /**
  * POLYGONA — calcul et compensation de polygonale encadrée / en antenne.
  * Traduction fidèle de POLYGONA.DOC (QuickBASIC 4.5, KOKOH A.E.).
@@ -2016,7 +2009,7 @@ function formatCoordinate(value, decimals = 3) {
  * @module engine/polygonale
  */
 
-const COEF = Math.PI / 200; // grades → radians
+var COEF = Math.PI / 200; // grades → radians
 
 /**
  * CALGAD — gisement (grades [0,400)) et distance depuis (ΔX, ΔY).
@@ -2218,10 +2211,8 @@ function computePolygonale(input) {
   return { rows, gdep, gar, length: q, closure, tolerances, warnings };
 }
 
-}
 
 /* engine/calsemis.js */
-{
 /**
  * CALSEMIS — calcul de semis de points par rayonnement.
  * Traduction fidèle de CALSEMIS.DOC (QuickBASIC 4.5, KOKOH A.E.).
@@ -2233,8 +2224,8 @@ function computePolygonale(input) {
  */
 
 
-const PI = Math.PI;
-const GRAD_TO_RAD = PI / 200;
+var PI = Math.PI;
+var GRAD_TO_RAD = PI / 200;
 
 /**
  * @typedef {Object} Station  point connu
@@ -2375,10 +2366,8 @@ function computeSemis(stations, observations) {
   return { rows, points: Array.from(pool.values()), errors, warnings };
 }
 
-}
 
 /* engine/implanta.js */
-{
 /**
  * IMPLANTA — implantation par rayonnement (piquetage).
  * Inverse de CALSEMIS : depuis une station orientée, calcule angle + distance
@@ -2448,10 +2437,8 @@ function computeImplantation(input) {
   return { gisRef, distRef: ref.distance, rows };
 }
 
-}
 
 /* engine/aller.js */
-{
 /**
  * ALLER (CALSURF) — surface d'un polygone par les coordonnées + unités cadastrales.
  * Traduction fidèle de ALLER.DOC / CALSURF (QuickBASIC 4.5, KOKOH A.E.).
@@ -2508,10 +2495,8 @@ function computeSurface(points) {
   };
 }
 
-}
 
 /* engine/calcopro.js */
-{
 /**
  * CALCOPRO — tantièmes de copropriété, multi-charges (base 100 000).
  * Traduction fidèle de CALCOPRO.DOC (QuickBASIC 4.5, KOKOH A.E.) — Traitement2.
@@ -2524,7 +2509,7 @@ function computeSurface(points) {
  */
 
 /** Catégories de charges par défaut (CALCOPRO). */
-const DEFAULT_COPRO_CATEGORIES = [
+var DEFAULT_COPRO_CATEGORIES = [
   { key: 'generales', field: 'coefG' },
   { key: 'particulieres', field: 'coefP' },
   { key: 'sol', field: 'coefS' },
@@ -2590,10 +2575,8 @@ function computeTantiemes(lots, options = {}) {
   return { rows, totals, ponderees, base, warnings };
 }
 
-}
 
 /* engine/profilon.js */
-{
 /**
  * PROFILON / PLONG — profil en long (terrain naturel + projet).
  * Traduction fidèle de PROFILON.DOC + PLONG.DOC (QuickBASIC 4.5, KOKOH A.E.).
@@ -2763,10 +2746,8 @@ function toScrProfil(model) {
   return out.join('\n') + '\n';
 }
 
-}
 
 /* engine/proftyp.js */
-{
 /**
  * PROFTYP — profil en travers type (chaussée, accotements, talus déblai/remblai).
  * Traduction fidèle de PROFTYP.DOC (QuickBASIC 4.5, KOKOH A.E.).
@@ -2844,10 +2825,8 @@ function computeProfilType(p) {
   return { type: remblai ? 'remblai' : 'deblai', points, surface };
 }
 
-}
 
 /* engine/projet.js */
-{
 /**
  * PROJET — projet routier : cubatures déblai/remblai + devers/largeurs par PK.
  * Traduction fidèle de PROJET.DOC (QuickBASIC 4.5, KOKOH A.E.).
@@ -2927,10 +2906,8 @@ function computeProjet(points, params) {
   return { volumes: { deblai, remblai, total: deblai + remblai }, segments, profiles };
 }
 
-}
 
 /* engine/ptnodal.js */
-{
 /**
  * PT-NODAL — calcul de point nodal (convergence de plusieurs cheminements).
  * Coordonnées du nœud = moyenne pondérée (poids = 1/longueur) des estimations
@@ -2940,7 +2917,7 @@ function computeProjet(points, params) {
  */
 
 
-const COEF = Math.PI / 200;
+var COEF = Math.PI / 200;
 
 function wrap400(v) {
   while (v > 400) v -= 400;
@@ -3036,10 +3013,8 @@ function computePointNodal(input) {
   return { node, branches, warnings };
 }
 
-}
 
 /* converters/fixed-width.js */
-{
 /**
  * Primitives de lecture/écriture à largeur fixe (équiv. MID$ / PRINT USING).
  * Pur. Voir docs/LEGACY-FORMATS.md §0.
@@ -4754,10 +4729,8 @@ function composeFixed(fields) {
   return buf.join('').replace(/\s+$/, '');
 }
 
-}
 
 /* converters/pol.js */
-{
 /**
  * Format .POL (liste de points polygonale, lisible, mètres).
  * Parse → modèle pivot { id, x, y, z } en mètres.
@@ -4766,7 +4739,7 @@ function composeFixed(fields) {
  */
 
 
-const POL_HEADER = ['PO', 'POL', 'Nø', 'N ø'];
+var POL_HEADER = ['PO', 'POL', 'Nø', 'N ø'];
 
 /**
  * Parse un fichier .POL en liste de points (mètres).
@@ -4806,10 +4779,8 @@ function serializePol(points) {
   return lines.join('\r\n') + '\r\n';
 }
 
-}
 
 /* converters/dat.js */
-{
 /**
  * Format .DAT (échange interne). Deux familles : POLYGONALE | SEMIS.
  * Parse → modèle pivot en unités SI (mètres / grades).
@@ -4819,21 +4790,21 @@ function serializePol(points) {
 
 
 /** Code type .DAT SEMIS (ligne 2) → instrument. */
-const SEMIS_TYPE_BY_CODE = { '2 0': 'RDS', '5 0': 'T12', '4 0': 'DIE' };
+var SEMIS_TYPE_BY_CODE = { '2 0': 'RDS', '5 0': 'T12', '4 0': 'DIE' };
 /** Instrument → code type .DAT (inverse de SEMIS_TYPE_BY_CODE). */
-const CODE_BY_SEMIS_TYPE = { RDS: '2 0', T12: '5 0', DIE: '4 0' };
+var CODE_BY_SEMIS_TYPE = { RDS: '2 0', T12: '5 0', DIE: '4 0' };
 
 /**
  * Cartes de colonnes SEMIS (base 1) — source unique partagée parse ⇄ serialize.
  * `scale` = facteur SI→DAT (inverse de la division au parsing). Voir §2.B.
  */
-const DAT_SEMIS_COMMON = [
+var DAT_SEMIS_COMMON = [
   { key: 'st',  start: 1,  len: 5, kind: 'str' },
   { key: 'ref', start: 6,  len: 5, kind: 'str' },
   { key: 'pv',  start: 11, len: 5, kind: 'str' },
   { key: 'ag',  start: 16, len: 6, kind: 'num', scale: 100 },
 ];
-const DAT_SEMIS_VARIANT = {
+var DAT_SEMIS_VARIANT = {
   RDS: [
     { key: 'f3',  start: 23, len: 4, scale: 1000 },
     { key: 'f2',  start: 28, len: 4, scale: 1000 },
@@ -5003,10 +4974,8 @@ function serializeDatSemis(observations) {
   return lines.join('\r\n') + '\r\n';
 }
 
-}
 
 /* converters/cnt.js */
-{
 /**
  * Format .CNT (carnet de terrain SEMIS, lisible, mètres/grades).
  * Parse → observations en unités SI. Voir docs/LEGACY-FORMATS.md §3.
@@ -5014,14 +4983,14 @@ function serializeDatSemis(observations) {
  */
 
 
-const CNT_HEADER = ['SEM', 'ST.', 'LEV'];
+var CNT_HEADER = ['SEM', 'ST.', 'LEV'];
 
 /**
  * Carte des colonnes .CNT (base 1) — source unique partagée parse ⇄ serialize.
  * `start`/`len` identiques à `parseCnt` ; `dec` = décimales à l'écriture.
  * Voir docs/LEGACY-FORMATS.md §3.
  */
-const CNT_COLS = [
+var CNT_COLS = [
   { key: 'st',   start: 1,  len: 5, kind: 'str' },
   { key: 'ref',  start: 7,  len: 5, kind: 'str' },
   { key: 'pv',   start: 13, len: 5, kind: 'str' },
@@ -5103,10 +5072,8 @@ function serializeCnt(observations) {
   return lines.join('\r\n') + '\r\n';
 }
 
-}
 
 /* converters/cop.js */
-{
 /**
  * Format .COP (copropriété : lots + coefficients de charges).
  * Parse → { meta, lots } prêt pour engine/calcopro.computeTantiemes.
@@ -5151,10 +5118,8 @@ function parseCop(text) {
   return { meta, lots };
 }
 
-}
 
 /* converters/profil.js */
-{
 /**
  * Formats de profil en long : .PRO (Pk,AltTN,AltPR) et .TNL/.PRL (Pk,Alt).
  * Voir docs/algorithms/PROFILON.md §2.
@@ -5193,10 +5158,8 @@ function parseProfilSeries(text, header = 'TNL') {
   return out;
 }
 
-}
 
 /* converters/xyz.js */
-{
 /**
  * Parser binaire .xyz — nuage de points (entrée de FICHPROF / FICHPTRA).
  * Fichier QuickBASIC à accès direct, enregistrement = 29 octets :
@@ -5207,9 +5170,9 @@ function parseProfilSeries(text, header = 'TNL') {
  * @module converters/xyz
  */
 
-const RECORD_SIZE = 29; // 5 + 8 + 8 + 8
-const ID_LEN = 5;
-const COORD_LEN = 8;
+var RECORD_SIZE = 29; // 5 + 8 + 8 + 8
+var ID_LEN = 5;
+var COORD_LEN = 8;
 
 /** Normalise une entrée binaire en { view: DataView, bytes: Uint8Array }. */
 function asBinary(data) {
@@ -5314,10 +5277,8 @@ function isXyzBinary(data) {
   }
 }
 
-}
 
 /* converters/sl23geom.js */
-{
 /**
  * Convertisseur SL23GEOM — Seuil 2.3 (.SPT) ↔ GEOM (.DAT binaire)
  * Implémente SL23GEOM.DOC — KOKOH Adjoumany Emile (1993-1994)
@@ -5339,9 +5300,9 @@ function isXyzBinary(data) {
  */
 
 
-const RECORD_SIZE = 21;  // 5 (NUM$) + 8 (X$) + 8 (Y$)
-const NUM_LEN = 5;
-const COORD_LEN = 8;
+var RECORD_SIZE = 21;  // 5 (NUM$) + 8 (X$) + 8 (Y$)
+var NUM_LEN = 5;
+var COORD_LEN = 8;
 
 /**
  * Convertit Seuil 2.3 .SPT (texte) → GEOM .DAT (binaire)
@@ -5459,10 +5420,8 @@ function isSeuil23Format(content) {
   return header.includes('NUMERO') || header.includes('ABSCISSE') || header.includes('ORDONNEE');
 }
 
-}
 
 /* converters/dxf-fixed.js */
-{
 /**
  * Moteur d'export DXF (AutoCAD R12 ASCII) + SVG générique.
  * Consomme un modèle de dessin neutre (entités) produit par les moteurs
@@ -5478,7 +5437,7 @@ function isSeuil23Format(content) {
  *   { type:'circle',   x,y, r, layer? }
  */
 
-const DEF_LAYER = '0';
+var DEF_LAYER = '0';
 
 /** Formatage numérique DXF/SVG (3 décimales, pas de notation exponentielle). */
 function n(v) {
@@ -5665,10 +5624,8 @@ function profilToEntities(model) {
   // Pentes / distances (texte horizontal)
   for (const p of model.
 
-}
 
 /* converters/advanced-generators.js */
-{
 /**
  * Générateurs de profils — Phase 5 (FICHPROF, FICHPTRA, FIPROTN, FPLEECI/FPLEECI1).
  * Traduction fidèle des originaux QuickBASIC 4.5 d'Emile KOKOH Adjoumany.
@@ -5679,7 +5636,7 @@ function profilToEntities(model) {
 
 
 /** Biais d'arrondi mm de l'original (CALGAD : Distance = SQR(...) + .0005). */
-const ROUND_BIAS = 0.0005;
+var ROUND_BIAS = 0.0005;
 
 /** Distance euclidienne 2D brute (sans biais). */
 function calculateDistance2D(p1, p2) {
@@ -5720,8 +5677,8 @@ function headerBlock(colsLine, opts = {}) {
   ].join('\n');
 }
 
-const COLS_PTN = 'N°     AL.TN.   DIS.TN';
-const COLS_PLG = 'N°     AL.TN.   DIS.CUM.  DIS.PAR.  ALTI.PRO.';
+var COLS_PTN = 'N°     AL.TN.   DIS.TN';
+var COLS_PLG = 'N°     AL.TN.   DIS.CUM.  DIS.PAR.  ALTI.PRO.';
 
 // ── FICHPROF / FICHPTRA : extraction des points de profil ──────────────────
 
@@ -5950,10 +5907,8 @@ function generateProfilEnLongFromSpt(sptText, startCumul = 0, headerOpts = {}) {
   return generateProfilEnLong(parseSptContent(sptText), startCumul, headerOpts);
 }
 
-}
 
 /* engine/index.js */
-{
 /**
  * Façade du moteur topographique.
  * Ré-exporte toutes les fonctions pures + attache window.TopoEngine
@@ -5990,7 +5945,7 @@ export {
   computeProjet,
 };
 
-const TopoEngine = {
+var TopoEngine = {
   intersectLines, polygonArea, lineEquation, distance, gisement,
   formatCoordinate, convertArea,
   computePolygonale, calgad,
@@ -6010,10 +5965,8 @@ if (typeof window !== 'undefined') {
   window.TopoEngine = TopoEngine;
 }
 
-}
 
 /* converters/index.js */
-{
 /**
  * LegacyParser — façade de détection + dispatch des formats legacy.
  * Convertit fichiers .POL / .DAT / .CNT ⇄ modèle pivot SI.
@@ -6132,42 +6085,38 @@ if (typeof window !== 'undefined') {
   };
 }
 
-}
 
 /* ui/canvas-constants.js */
-{
 /**
  * Constantes de style partagées par le CanvasRenderer et ses mixins de dessin.
  * @module ui/canvas-constants
  */
 
 /** Background fill for the canvas. (Flat Light) */
-const BG_COLOR         = '#ffffff';
+var BG_COLOR         = '#ffffff';
 /** Subtle grid line color. */
-const GRID_LINE_COLOR  = 'rgba(100,116,139,0.15)';
+var GRID_LINE_COLOR  = 'rgba(100,116,139,0.15)';
 /** Grid label color. */
-const GRID_LABEL_COLOR = '#64748b';
+var GRID_LABEL_COLOR = '#64748b';
 /** Grid label font. */
-const GRID_LABEL_FONT  = '10px monospace';
+var GRID_LABEL_FONT  = '10px monospace';
 /** Default point radius in screen pixels. */
-const POINT_RADIUS     = 5;
+var POINT_RADIUS     = 5;
 /** Default label font. */
-const LABEL_FONT        = '12px monospace';
+var LABEL_FONT        = '12px monospace';
 /** Intersection point radius. */
-const INTERSECT_RADIUS = 8;
+var INTERSECT_RADIUS = 8;
 /** Minimum zoom scale. */
-const MIN_SCALE        = 0.0001;
+var MIN_SCALE        = 0.0001;
 /** Maximum zoom scale. */
-const MAX_SCALE        = 1e8;
+var MAX_SCALE        = 1e8;
 /** Mouse-wheel zoom speed factor. */
-const ZOOM_SENSITIVITY = 1.1;
+var ZOOM_SENSITIVITY = 1.1;
 /** Padding ratio for fitToPoints. */
-const DEFAULT_PAD      = 0.12;
+var DEFAULT_PAD      = 0.12;
 
-}
 
 /* ui/canvas-draw-primitives.js */
-{
 /**
  * Primitives de dessin du CanvasRenderer : points, lignes, polygones,
  * intersections, étiquettes de distance. Installées sur le prototype.
@@ -6418,10 +6367,8 @@ function installPrimitives(P) {
   };
 }
 
-}
 
 /* ui/canvas-draw-profil.js */
-{
 /**
  * Dessins de profils du CanvasRenderer : profil en long (PROFILON) et
  * profil type (PROFTYP). Installés sur le prototype.
@@ -6669,10 +6616,8 @@ function installProfil(P) {
   };
 }
 
-}
 
 /* ui/canvas-renderer.js */
-{
 /**
  * ============================================================================
  * CanvasRenderer — Interactive 2D Visualisation for Topography
@@ -7063,10 +7008,8 @@ if (typeof window !== 'undefined') {
 
 export { CanvasRenderer };
 
-}
 
 /* ui/core.js */
-{
 /**
  * KokoTopo Modern — Noyau partagé du renderer.
  * État global, helpers DOM, toast, formatage, registre d'outils et navigation.
@@ -7079,7 +7022,7 @@ export { CanvasRenderer };
  */
 
 /* ─── État applicatif partagé (mutable, importé par référence) ─── */
-const state = {
+var state = {
   currentTool: 'intersection',
   intersection: { d1Mode: 'points', d2Mode: 'points', result: null },
   surface: { points: [], result: null },
@@ -7094,8 +7037,8 @@ const state = {
 };
 
 /* ─── Helpers DOM ─── */
-const $ = (sel, ctx = document) => ctx.querySelector(sel);
-const $ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
+var $ = (sel, ctx = document) => ctx.querySelector(sel);
+var $ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
 function show(el) { if (el) el.classList.remove('hidden'); }
 function hide(el) { if (el) el.classList.add('hidden'); }
 function setActive(navItem) {
@@ -7187,7 +7130,7 @@ async function exportFile(content, defaultName, formatLabel, extensions) {
 }
 
 /* ─── Registre d'outils ─── */
-const toolRegistry = new Map();
+var toolRegistry = new Map();
 /**
  * Enregistre les hooks d'un outil.
  * @param {string} id  identifiant (= data-tool / suffixe #tool-…)
@@ -7207,8 +7150,8 @@ function setupAllTools() {
 /* ─── Canvas (CanvasRenderer global, live binding partagé) ─── */
 // `renderer` est un export *live* : les modules d'outils l'importent et le
 // lisent à l'instant du dessin (réaffecté ci-dessous par initCanvasForTool).
-let renderer = null;
-let resizeObserver = null;
+var renderer = null;
+var resizeObserver = null;
 function getRenderer() { return renderer; }
 
 function initCanvasForTool(toolId) {
@@ -7252,7 +7195,7 @@ function redraw() {
 }
 
 /* ─── Navigation ─── */
-const TOOL_TITLES = {
+var TOOL_TITLES = {
   home: 'Accueil',
   intersection: 'Intersection de Droites',
   surface: 'Surface de Polygone',
@@ -7323,10 +7266,8 @@ function toolHasSplitLayout(toolId) {
   return !!(panel && panel.querySelector('.tool-layout') && panel.querySelector('.canvas-section'));
 }
 
-}
 
 /* ui/history.js */
-{
 /**
  * KokoTopo Modern — Historique des travaux (persistant via IPC userData).
  * Modèle + rendu (accueil + page complète) + enregistrement des calculs.
@@ -7336,9 +7277,9 @@ function toolHasSplitLayout(toolId) {
 
 
 // Cache mémoire de l'historique chargé depuis userData/history.json
-let history = { settings: { autoDeleteDays: 0 }, entries: [] };
+var history = { settings: { autoDeleteDays: 0 }, entries: [] };
 
-const TOOL_LABELS = {
+var TOOL_LABELS = {
   intersection: 'Intersection de Droites',
   surface: 'Surface de Polygone',
   polygona: 'Polygonales',
@@ -7701,10 +7642,8 @@ registerTool('historique', {
   },
 });
 
-}
 
 /* ui/tool-calcopro.js */
-{
 /**
  * Outil : Calculs de copropriété (tantièmes). @module ui/tool-calcopro
  */
@@ -7871,10 +7810,8 @@ registerTool('calcopro', {
   setup: setupCalcoproTool,
 });
 
-}
 
 /* ui/tool-calsemis.js */
-{
 /**
  * Outil : Calcul de semis de points. @module ui/tool-calsemis
  */
@@ -8063,10 +8000,8 @@ registerTool('calsemis', {
   redraw: drawCalsemis,
 });
 
-}
 
 /* ui/tool-converters.js */
-{
 /**
  * Outil : Convertisseurs de formats (DAT/POL/CNT…). @module ui/tool-converters
  */
@@ -8169,10 +8104,8 @@ function setupConvertersTool() {
 
 registerTool('converters', { setup: setupConvertersTool });
 
-}
 
 /* ui/tool-fichprof.js */
-{
 /**
  * Outil : FICHPROF — générateur de fichiers profils (Phase 5). @module ui/tool-fichprof
  */
@@ -8354,10 +8287,8 @@ ${res.pro}`;
 
 registerTool('fichprof', { setup: setupFichprofTool });
 
-}
 
 /* ui/tool-implanta.js */
-{
 /**
  * Outil : Implantation & piquetage. @module ui/tool-implanta
  */
@@ -8542,10 +8473,8 @@ registerTool('implanta', {
   redraw: drawImplanta,
 });
 
-}
 
 /* ui/tool-profilon.js */
-{
 /**
  * Outil : Profil en long (PROFILON/PLONG). @module ui/tool-profilon
  */
@@ -8699,7 +8628,7 @@ function loadDemoProfilon() {
   computeProfilon();
 }
 
-let profilonLoadMode = 'pro';
+var profilonLoadMode = 'pro';
 function triggerProfilonFileInput(mode) {
   profilonLoadMode = mode;
   $('#file-profilon-input').click();
@@ -8761,10 +8690,8 @@ registerTool('profilon', {
   redraw: drawProfilon,
 });
 
-}
 
 /* ui/tool-proftyp.js */
-{
 /**
  * Outil : Profil type (déblai/remblai). @module ui/tool-proftyp
  */
@@ -8824,10 +8751,8 @@ registerTool('proftyp', {
   redraw: drawProftyp,
 });
 
-}
 
 /* ui/tool-projet.js */
-{
 /**
  * Outil : Projet routier (cubatures). @module ui/tool-projet
  */
@@ -9009,10 +8934,8 @@ registerTool('projet', {
   setup: setupProjetTool,
 });
 
-}
 
 /* ui/tool-ptnodal.js */
-{
 /**
  * Outil : Point nodal (convergence de cheminements). @module ui/tool-ptnodal
  */
@@ -9173,10 +9096,8 @@ registerTool('ptnodal', {
   redraw: drawPtNodal,
 });
 
-}
 
 /* ui/tool-surface.js */
-{
 /**
  * Outil : Surface de polygone. @module ui/tool-surface
  */
@@ -9489,10 +9410,8 @@ registerTool('surface', {
   onCanvasClick: (coords) => addSurfacePointAt(coords),
 });
 
-}
 
 /* ui/tool-intersection.js */
-{
 /**
  * Outil : Intersection de droites. @module ui/tool-intersection
  */
@@ -9853,10 +9772,8 @@ registerTool('intersection', {
   onCanvasClick: (coords) => fillNextIntersectionPoint(coords),
 });
 
-}
 
 /* ui/tool-polygona.js */
-{
 /**
  * Outil : Polygonales & cheminements. @module ui/tool-polygona
  */
@@ -10253,10 +10170,8 @@ registerTool('polygona', {
   redraw: drawPolygona,
 });
 
-}
 
 /* ui/app.js */
-{
 /**
  * KokoTopo Modern — Point d'entrée du renderer (ES module).
  * Assemble le noyau, l'historique et les modules d'outils (auto-enregistrés
@@ -10413,7 +10328,6 @@ if (document.readyState === 'loading') {
   init();
 }
 
-}
 
 })();
 
